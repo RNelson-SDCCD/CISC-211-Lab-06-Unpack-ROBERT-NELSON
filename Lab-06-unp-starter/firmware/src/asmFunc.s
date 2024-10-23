@@ -14,7 +14,7 @@
 .type nameStr,%gnu_unique_object
     
 /*** STUDENTS: Change the next line to your name!  **/
-nameStr: .asciz "Inigo Montoya"  
+nameStr: .asciz "Robert Nelson"  
  
 .align    /* ensure following vars are allocated on word-aligned addresses */
 
@@ -72,7 +72,38 @@ asmFunc:
      * Use it to test the C test code */
     
     /*** STUDENTS: Place your code BELOW this line!!! **************/
-
+    
+    /***
+     * Copy the value passed into r0 to a new register
+     * This will allow us to manipulate it indendently
+    ***/
+    mov r1, r0
+    /***
+     * Perform an arithmetic shift right by 16 bits
+     * The A bits were previously the 16 MSB, and need to be moved down
+     * ASR also performs the necessary sign extension of A
+     ***/
+    asr r2, r1, #16
+    
+    /* Store the now-unpacked value of A */
+    ldr r3, =a_value
+    str r2, [r3]
+    
+    /* Begin with the same process as above moving r0 to new register */
+    mov r1, r0
+    /***
+     * Perform a logical shift left by 16 bits
+     * The B bits are sitting in the LSB but bit 31 is used for sign extension
+     * So an LSL will move the bits to where the B sign value is the MSB
+     * After this, perform an ASR by 16 bits to sign extend the MSB
+     * This process is incredibly similar to A, but with one extra step
+    ***/
+    lsl r2, r1, #16
+    asr r1, r2, #16
+    
+    /* Store the now-unpacked value of B */
+    ldr r3, =b_value
+    str r1, [r3]
     
     /*** STUDENTS: Place your code ABOVE this line!!! **************/
 
